@@ -1,0 +1,1 @@
+# handraqw_minigames_bot
