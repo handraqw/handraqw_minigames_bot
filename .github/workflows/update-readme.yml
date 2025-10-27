@@ -1,32 +1,56 @@
-name: Update README
+name: Update README Multiple Times
 
 on:
   schedule:
-    - cron: "*/48 * * * *"  
+    - cron: "0 */1 * * *"  
+    - cron: "30 */1 * * *" 
   workflow_dispatch:
 
 jobs:
   update-readme:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          token: ${{ secrets.GITHUB_TOKEN }} 
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
 
-      - name: Update README
-        run: |
-          if grep -q "Last update:" README.md; then
-            sed -i "s/^Last update:.*/Last update: $(date '+%Y-%m-%d %H:%M:%S')/" README.md
-          else
-            echo "Last update: $(date '+%Y-%m-%d %H:%M:%S')" >> README.md
-          fi
-
-      - name: Commit and Push changes
+      - name: Setup Git
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Generate random content and update README
+        run: |
+          # Создаем случайное число для разнообразия
+          RANDOM_NUM=$(( RANDOM % 1000 ))
+          TIMESTAMP=$(date '+%Y-%m-%d %H:%M:%S')
+          
+          # Обновляем или создаем секцию в README
+          if grep -q "<!-- AUTO-UPDATE -->" README.md; then
+            # Заменяем существующий контент между маркерами
+            sed -i '/<!-- AUTO-UPDATE -->/,/<!-- END-AUTO-UPDATE -->/d' README.md
+          fi
+          
+          # Добавляем новый контент
+          cat >> README.md << EOF
+
+<!-- AUTO-UPDATE -->
+
+- **Last update:** $TIMESTAMP
+- **Random value:** $RANDOM_NUM
+- **Commit count:** $(date +%s)
+
+This section is automatically updated 30 times per day.
+<!-- END-AUTO-UPDATE -->
+EOF
+
+      - name: Commit and push changes
+        run: |
           git add README.md
-          git commit -m "Auto update README $(date '+%Y-%m-%d %H:%M:%S')" || echo "No changes to commit"
+          git commit -m "Auto-update README: $(date '+%Y-%m-%d %H:%M:%S') - Random: $(( RANDOM % 1000 ))" || echo "No changes to commit"
           git push
