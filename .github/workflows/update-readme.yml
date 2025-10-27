@@ -2,9 +2,8 @@ name: Update README
 
 on:
   schedule:
-    # каждые 48 минут
     - cron: "*/48 * * * *"
-  workflow_dispatch:  # позволяет запустить вручную
+  workflow_dispatch: 
 
 jobs:
   update-readme:
@@ -16,7 +15,14 @@ jobs:
 
       - name: Update README
         run: |
-          echo "Last update: $(date '+%Y-%m-%d %H:%M:%S')" >> README.md
+          # Перезаписываем или добавляем строку с датой
+          if grep -q "Last update:" README.md; then
+            # Обновляем существующую строку
+            sed -i "s/^Last update:.*/Last update: $(date '+%Y-%m-%d %H:%M:%S')/" README.md
+          else
+            # Добавляем строку в конец файла
+            echo "Last update: $(date '+%Y-%m-%d %H:%M:%S')" >> README.md
+          fi
 
       - name: Commit changes
         run: |
@@ -24,4 +30,4 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add README.md
           git commit -m "Auto update README $(date '+%Y-%m-%d %H:%M:%S')" || echo "No changes to commit"
-          git push
+          git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git HEAD:main
