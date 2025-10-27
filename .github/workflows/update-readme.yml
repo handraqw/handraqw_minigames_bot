@@ -1,0 +1,27 @@
+name: Update README
+
+on:
+  schedule:
+    # каждые 48 минут
+    - cron: "*/48 * * * *"
+  workflow_dispatch:  # позволяет запустить вручную
+
+jobs:
+  update-readme:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Update README
+        run: |
+          echo "Last update: $(date '+%Y-%m-%d %H:%M:%S')" >> README.md
+
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add README.md
+          git commit -m "Auto update README $(date '+%Y-%m-%d %H:%M:%S')" || echo "No changes to commit"
+          git push
