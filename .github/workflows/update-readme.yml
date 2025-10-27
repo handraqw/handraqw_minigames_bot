@@ -2,7 +2,6 @@ name: Update README Multiple Times
 
 on:
   schedule:
-    # 30 раз в день с интервалом ~48 минут
     - cron: "*/48 * * * *"
   workflow_dispatch:
 
@@ -26,18 +25,14 @@ jobs:
 
       - name: Generate random content and update README
         run: |
-          # Создаем случайное число для разнообразия
           RANDOM_NUM=$(( RANDOM % 1000 ))
           TIMESTAMP=$(date '+%Y-%m-%d %H:%M:%S')
           
-          # Обновляем или создаем секцию в README
           if grep -q "<!-- AUTO-UPDATE -->" README.md; then
-            # Заменяем существующий контент между маркерами
             sed -i '/<!-- AUTO-UPDATE -->/,/<!-- END-AUTO-UPDATE -->/d' README.md
           fi
           
-          # Добавляем новый контент
-          cat >> README.md << EOF
+          cat >> README.md << 'EOF'
 
 <!-- AUTO-UPDATE -->
 ## Auto-Generated Content
