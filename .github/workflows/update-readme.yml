@@ -2,7 +2,7 @@ name: Update README Multiple Times
 
 on:
   schedule:
-
+    # 30 раз в день с интервалом ~48 минут
     - cron: "*/48 * * * *"
   workflow_dispatch:
 
@@ -40,7 +40,7 @@ jobs:
           cat >> README.md << EOF
 
 <!-- AUTO-UPDATE -->
-
+## Auto-Generated Content
 
 - **Last update:** $TIMESTAMP
 - **Random value:** $RANDOM_NUM
