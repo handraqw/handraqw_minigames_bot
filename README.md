@@ -35,4 +35,4 @@ _На данный момент отключен от хостинга._
    ```bash
    git clone https://github.com/handraqw/handraqw_minigames_bot.git
    cd handraqw_minigames_bot
-ор
+о
