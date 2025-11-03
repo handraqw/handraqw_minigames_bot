@@ -5,7 +5,7 @@
 _На данный момент отключен от хостинга._
 
 ---
-wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
+
 
 ## Описание
 
