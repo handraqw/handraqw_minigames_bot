@@ -1,4 +1,4 @@
-# handraqw_minigames_bot
+# лhandraqw_minigames_bot
 
 **Телеграм-бот для школьного проекта**  
 Ссылка на бота: https://t.me/khimov_game_bot  
